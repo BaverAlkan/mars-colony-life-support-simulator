@@ -4,6 +4,8 @@ A text-based survival game written in C. You are an engineer stranded alone at a
 
 This project was developed for the *Algorithms and Programming* course. It uses only core C constructs: `switch-case`, `if / else if / else`, `for`, `do-while`, arithmetic and logical operators, and `rand()`.
 
+> **Türkçe sürüm için:** bu belgenin tam Türkçe çevirisi [aşağıdadır](#türkçe-sürüm).
+
 > **Note:** The in-game interface is in Turkish (without special characters, for terminal compatibility), as required by the course assignment. Command letters are Turkish mnemonics (e.g. `K` = *Kolay* / Easy).
 
 ## Table of Contents
@@ -17,7 +19,7 @@ This project was developed for the *Algorithms and Programming* course. It uses 
 - [Sample Session](#sample-session)
 - [How the C Constructs Are Used](#how-the-c-constructs-are-used)
 - [Design Decisions](#design-decisions)
-- [Türkçe Özet](#türkçe-özet)
+- [Türkçe Sürüm (Turkish Version)](#türkçe-sürüm)
 
 ## Features
 
@@ -163,41 +165,134 @@ The assignment leaves some details open. These are the choices made in this impl
 - The airlock seal is permanent once achieved.
 - `T`, `U` and `K` do not use energy because the assignment does not specify an energy cost for them.
 
-## Türkçe Özet
+## Türkçe Sürüm
 
-### Proje Hakkında
+**Mars Kolonisi Yaşam Destek Simülatörü**
 
-Bu proje, C diliyle yazılmış metin tabanlı bir **Mars Kolonisi Yaşam Destek Simülatörü**dür. Oyuncu, Mars'taki küçük bir araştırma istasyonunda tek başına kalmış bir mühendisi yönetir ve kurtarma ekibi gelene kadar **15 gün** hayatta kalmaya çalışır. Program sağlık, enerji, oksijen, su, yedek parça, modül hasarı ve gün sayısını takip eder.
+C ile yazılmış, metin tabanlı bir hayatta kalma oyunu. Mars'taki küçük bir araştırma istasyonunda tek başına kalmış bir mühendissin. Tek karakterli komutlarla **sağlık**, **enerji**, **oksijen**, **su**, **yedek parça** ve **modül hasarını** yönet ve kurtarma ekibi gelene kadar **15 gün** hayatta kal.
 
-Proje *Algoritma ve Programlama* dersi ödevi kapsamında geliştirilmiştir. Yalnızca C'nin temel yapıları kullanılmıştır: `switch-case`, `if / else if / else`, `for`, `do-while`, aritmetik ve mantıksal operatörler, `rand()`.
+Bu proje *Algoritma ve Programlama* dersi için geliştirilmiştir. Yalnızca C'nin temel yapılarını kullanır: `switch-case`, `if / else if / else`, `for`, `do-while`, aritmetik ve mantıksal operatörler ve `rand()`.
+
+> **Not:** Oyun arayüzü, ödevin gereği olarak Türkçedir (terminal uyumu için Türkçe özel karakterler kullanılmamıştır). Komut harfleri Türkçe kısaltmalardır (örn. `K` = *Kolay*).
+
+### İçindekiler
+
+- [Özellikler](#özellikler)
+- [Derleme ve Çalıştırma](#derleme-ve-çalıştırma)
+- [Oynanış](#oynanış)
+- [Komutlar](#komutlar)
+- [Zorluk Seviyeleri](#zorluk-seviyeleri)
+- [Zaman, Kazanma ve Kaybetme](#zaman-kazanma-ve-kaybetme)
+- [Örnek Oturum](#örnek-oturum)
+- [C Yapıları Nasıl Kullanıldı](#c-yapıları-nasıl-kullanıldı)
+- [Tasarım Kararları](#tasarım-kararları)
+
+### Özellikler
+
+- Büyük/küçük harf duyarsız 8 tek karakterli komut (`g` ve `G` aynı işlemi yapar).
+- Başlangıç kaynaklarını ve olay eşiklerini değiştiren üç zorluk seviyesi.
+- Rastgele olaylar (`rand() % 100`); her zar ve karşılaştırıldığı eşik ekrana yazılır, örn. `Zar: 37 / Esik: 70 -> SU BULUNDU!`.
+- `for` döngüsüyle simüle edilen, `break` ve `continue` kullanan bir kum fırtınası.
+- `do-while` döngüsüyle ve sınırlı denemeyle çalışan hava kilidi şifre mekanizması.
+- Hayatta kalınan gün, toplam tur, son değerler ve puanı gösteren bir sonuç raporu.
 
 ### Derleme ve Çalıştırma
+
+`gcc` veya `clang` gibi bir C derleyicisine ihtiyacın var.
 
 ```bash
 gcc -o mars mars_simulator.c
 ./mars
 ```
 
+Windows'ta (MinGW) `./mars` yerine `mars.exe` çalıştırılır.
+
+### Oynanış
+
+Sekiz değeri takip edersin: **sağlık**, **enerji**, **oksijen** (hepsi 0–100), **su**, **yedek parça**, **modül hasarı** (0–100, yüksek olması kötüdür), **hava kilidi mühürlü mü (0/1)** ve **gün / tur sayaçları**.
+
+Oyun; `Q` ile çıkarsan, sağlığın veya oksijenin 0'a düşerse ya da 15. günü tamamlarsan sona erer.
+
 ### Komutlar
 
-| Tuş | Komut | Açıklama |
+| Tuş | Komut | Ne yapar |
 |-----|-------|----------|
-| `G` | Keşif | Enerji 15, oksijen 10 azalır. Su, yedek parça bulunabilir ya da yaralanılabilir. |
-| `O` | Oksijen üret | 2 su = 3 oksijen. Tek sayıda su girilirse 1 birim artık kalır (mod operatörü). |
-| `T` | Tamir | Yedek parça harcanarak modül hasarı azaltılır (hafif / orta / ağır kademe). |
-| `D` | Durum raporu | Tüm değerleri ve kritik uyarıları gösterir. Tur harcamaz. |
-| `U` | Uyu / dinlen | Enerji ve sağlık artar; oksijen 20'nin altındaysa sağlık azalır. |
-| `K` | Kum fırtınası | `for` döngüsüyle simüle edilir; `break` ve `continue` kullanılır. |
-| `H` | Hava kilidi şifresi | `do-while` döngüsüyle, 3 denemelik şifre mekanizması. |
-| `Q` | Çıkış | Oyunu bitirir ve sonuç raporunu yazar. |
+| `G` | Keşif (*Kesif*) | 15 enerji ve 10 oksijen harcar. Yaralanabilirsin; su (+12), yedek parça (+1) bulabilir veya eli boş dönebilirsin. |
+| `O` | Oksijen üret (*Oksijen uret*) | Suyu oksijene çevirir: her 2 su 3 oksijen olur. Tek sayıda su girersen 1 birim depoda kalır. 10 enerji harcar. |
+| `T` | Tamir (*Tamir*) | Yedek parça harcayarak modül hasarını azaltır. Kademe, hasar seviyesine bağlıdır (aşağıya bak). |
+| `D` | Durum raporu (*Durum raporu*) | Tüm değerleri ve kritik uyarıları gösterir. Tur **harcamaz**. |
+| `U` | Uyu / dinlen (*Uyu / dinlen*) | +30 enerji, −5 oksijen. Sağlık +10 artar; ancak oksijen 20'nin altındaysa sağlık bunun yerine 5 azalır. |
+| `K` | Kum fırtınası (*Kum firtinasi*) | Birkaç turluk bir fırtına çalıştırır; her tur sana zarar verebilir veya zararsız geçebilir. |
+| `H` | Hava kilidi şifresi (*Hava kilidi sifresi*) | Tek harflik şifreyi 3 denemede tahmin ederek hava kilidini mühürle. |
+| `Q` | Çıkış (*Cikis*) | Oyunu bitirir ve sonuç raporunu yazar. |
 
-Komutlar büyük/küçük harf duyarsızdır. Tanımsız komut uyarı verir ve tur harcamaz.
+Tanımsız bir komut uyarı verir ve tur **harcamaz**.
 
-### Oyunun Akışı
+**Tamir kademeleri (`T`):**
 
-- `D` ve tanımsız komutlar dışındaki her geçerli komut 1 tur harcar. Her 3 turda bir yeni gün başlar; oksijen 8 azalır, modül hasarı 70'in üzerindeyse sağlık 5 azalır.
-- Sağlık veya oksijen 0'a düşerse oyun kaybedilir; 15. gün tamamlanırsa kurtarma ekibi gelir ve oyun kazanılır.
-- Oyun bitince hayatta kalınan gün, toplam tur, son değerler ve puan yazdırılır.
-- Puan: `(gün × 100) + sağlık + oksijen − modül hasarı`.
+| Modül hasarı | Kademe | Harcanan yedek parça | Onarılan hasar |
+|--------------|--------|----------------------|----------------|
+| 0–30 | Hafif | 1 | 20 |
+| 31–70 | Orta | 2 | 35 |
+| 71–100 | Ağır | 3 | 50 |
+
+**Keşif (`G`) ayrıntıları:** `zar < 10 || modulHasari > 70` koşulu sağlanırsa yaralanırsın. Keşiflerde su bulma eşiği, `enerji > 40 && oksijen > 30` ise daha yüksek, değilse daha düşüktür. Eşiğin altında kalan ikinci bir zar su bulur, eşik + 20'nin altında kalan yedek parça bulur, aksi halde eli boş dönersin.
+
+**Kum fırtınası (`K`) ayrıntıları:** Her turda bir sayı üretilir. Sağlığın 50'nin üzerindeyse ve modül hasarı 50'nin altındaysa korunma eşiğin 40'tır, değilse 20'dir. Sonuç; zararsız geçme, sağlık kaybı, oksijen sızıntısı veya modül hasarı olabilir. Çift numaralı turlarda rüzgar şiddetlenir ve hasar iki katına çıkar. Hava kilidi mühürlüyse oksijen sızıntıları `continue` ile atlanır. Sağlık veya oksijen 0'a düşerse fırtına `break` ile hemen sonlandırılır. Sonunda bir özet yazdırılır.
+
+**Hava kilidi şifresi (`H`) ayrıntıları:** Şifre sabit değildir, o anki günden türetilir: `'A' + (gün % 26)`. İpucu, şifrenin `A` harfinden bugünün gün sayısı kadar ilerideki harf olduğunu söyler. Küçük harf girişi de kabul edilir. Her yanlış tahmin 5 enerji harcar ve "ileri git / geri git" ipucu verir. Doğru tahmin hava kilidini mühürler; 3 denemenin hepsi başarısız olursa modül hasarı 20 artar.
+
+### Zorluk Seviyeleri
+
+| | Kolay (`K`) | Normal (`N`) | Zor (`Z`) |
+|---|---|---|---|
+| Sağlık | 100 | 100 | 90 |
+| Enerji | 100 | 90 | 80 |
+| Oksijen | 100 | 90 | 80 |
+| Su | 60 | 50 | 40 |
+| Yedek parça | 5 | 3 | 2 |
+| Modül hasarı | 0 | 10 | 20 |
+| Fırtına turu | 3 | 5 | 7 |
+| Fırtına temel hasarı | 6 | 8 | 10 |
+| Su eşiği (iyi / kötü durum) | 70 / 40 | 60 / 30 | 50 / 25 |
+| Yaralanmada sağlık kaybı | 8 | 10 | 12 |
+
+Geçersiz bir zorluk girişinde seçim tekrar istenir.
+
+### Zaman, Kazanma ve Kaybetme
+
+- `D` ve tanımsız komutlar hariç her geçerli komut bir tur harcar. Kaynak yetersizliği yüzünden iptal edilen bir komut da tur sayılır.
+- Her 3 turda bir (`tur % 3 == 0`) yeni bir gün başlar: oksijen 8 azalır, modül hasarı 70'in üzerindeyse ayrıca 5 sağlık kaybedersin.
+- **Kazanma:** 15. günü tamamlarsın (45 tur) ve kurtarma ekibi gelir.
+- **Kaybetme:** Sağlık veya oksijen 0'a düşer. Bu kontrol her turun sonunda yapılır.
+- **Puan:** `(gün × 100) + sağlık + oksijen − modül hasarı`.
+
+### Örnek Oturum
+
+Örnek bir oyun çıktısı için yukarıdaki [Sample Session](#sample-session) bölümüne bakabilirsin. Oyunun ekran yazıları iki dilde de aynıdır (Türkçe), bu yüzden çıktı tekrar edilmemiştir.
+
+### C Yapıları Nasıl Kullanıldı
+
+| Yapı | Nerede kullanıldı | Neden |
+|---|---|---|
+| Fall-through'lu `switch-case` | Zorluk seçimi ve komut sistemi (`case 'g': case 'G':`) | Büyük/küçük harfi tek blokla karşılar ve komutları okunaklı tutar. `default` bilinmeyen girişi reddeder. |
+| `if / else if / else` | Tamir kademeleri, keşif sonuçları, fırtına olayları, dinlenirken iç içe kontroller, sınırlandırma, oyun sonu kontrolleri | Mevcut değerlere bağlı çok yollu kararlar. |
+| `for` döngüsü | Kum fırtınası turları | Tur sayısı önceden bellidir (zorluğa göre). `break` döngüyü erken bitirir, `continue` mühürlü hava kilidinde sızıntıyı atlar. |
+| `do-while` döngüsü | Ana komut döngüsü, zorluk seçimi, hava kilidi şifresi, su miktarı girişi | Bu bloklar koşul kontrol edilmeden önce en az bir kez çalışmalıdır. |
+| `%` (mod) | Oksijen üretiminde çift/tek su, çift fırtına turları, gün değişimi (`tur % 3`), şifre formülü | Çift/tek ve döngüsel hesaplamalar. |
+| `&&`, `\|\|` | Keşif eşikleri, yaralanma koşulu, şifre döngü koşulu, durum kontrolü | Birden fazla koşulu tek ifadede birleştirir. |
+| `rand() % 100` | Keşif ve fırtına zarları | Rastgele olaylar; her zar eşiğiyle birlikte yazdırılır. |
+
+### Tasarım Kararları
+
+Ödev bazı ayrıntıları açık bırakmaktadır. Bu uygulamada alınan kararlar şunlardır:
+
+- Tüm sayısal değerler (zorluk tablosu, bulunan miktarlar, onarım miktarları, dinlenme kazanımları, fırtına hasarı) oynanabilir bir denge için seçilmiştir.
+- Kaynak yetersizliği yüzünden iptal edilen komutlar da tur harcar, çünkü yalnızca `D` ve tanımsız komutlar istisnadır. `Q` oyunu bitirir ve tur olarak sayılmaz.
+- Bir `K` komutunun tamamı oyun açısından 1 tur sayılır; içindeki fırtına turları yalnızca döngünün iç turlarıdır.
+- "15. günü tamamlamak", gün sayacının 15'i geçmesi demektir (45 tur). 16. günün gün başı etkileri uygulanmaz.
+- Bir turun sonunda hem kazanma hem ölüm koşulu oluşursa ölüm önceliklidir.
+- Hava kilidi mührü bir kez sağlandıktan sonra kalıcıdır.
+- `T`, `U` ve `K` komutları enerji harcamaz, çünkü ödev bunlar için bir enerji maliyeti belirtmemektedir.
 
 
