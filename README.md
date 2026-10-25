@@ -200,6 +200,4 @@ Komutlar büyük/küçük harf duyarsızdır. Tanımsız komut uyarı verir ve t
 - Oyun bitince hayatta kalınan gün, toplam tur, son değerler ve puan yazdırılır.
 - Puan: `(gün × 100) + sağlık + oksijen − modül hasarı`.
 
-### Not
 
-Oyun arayüzü, ödevin gereği olarak Türkçedir (terminal uyumu için Türkçe özel karakterler kullanılmamıştır). Ödevde net belirtilmeyen noktalarda alınan tasarım kararları yukarıdaki **Design Decisions** bölümünde ve proje raporunda açıklanmıştır.
