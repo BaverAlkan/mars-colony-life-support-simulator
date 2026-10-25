@@ -2,11 +2,11 @@
 
 A text-based survival game written in C. You are an engineer stranded alone at a small research station on Mars. Manage your health, energy, oxygen, water, spare parts and module damage with single-character commands and survive **15 days** until the rescue team arrives.
 
-This project was developed for the *Algorithms and Programming* course. It uses only core C constructs: `switch-case`, `if / else if / else`, `for`, `do-while`, arithmetic and logical operators, and `rand()`.
+The project uses only core C constructs and no external libraries: `switch-case`, `if / else if / else`, `for`, `do-while`, arithmetic and logical operators, and `rand()`.
 
 > **Türkçe sürüm için:** bu belgenin tam Türkçe çevirisi [aşağıdadır](#türkçe-sürüm).
 
-> **Note:** The in-game interface is in Turkish (without special characters, for terminal compatibility), as required by the course assignment. Command letters are Turkish mnemonics (e.g. `K` = *Kolay* / Easy).
+> **Note:** The in-game interface is in Turkish (written without special characters for terminal compatibility). Command letters are Turkish mnemonics (e.g. `K` = *Kolay* / Easy).
 
 ## Table of Contents
 
@@ -155,7 +155,7 @@ PUAN: 280
 
 ## Design Decisions
 
-The assignment leaves some details open. These are the choices made in this implementation:
+Some mechanics can be implemented in more than one way. These are the choices made in this implementation:
 
 - All numeric values (difficulty table, amounts found, repair amounts, rest bonuses, storm damage) are chosen for a playable balance.
 - Commands cancelled for lack of resources still use a turn, because only `D` and undefined commands are exempt. `Q` ends the game and is not counted as a turn.
@@ -163,7 +163,7 @@ The assignment leaves some details open. These are the choices made in this impl
 - "Completing day 15" means the day counter passes 15 (45 turns). The day-start effects of a 16th day are not applied.
 - If a turn would end with both a win and a death condition, death takes priority.
 - The airlock seal is permanent once achieved.
-- `T`, `U` and `K` do not use energy because the assignment does not specify an energy cost for them.
+- `T`, `U` and `K` do not consume energy by design: repairs use spare parts, resting restores energy, and the storm is an environmental event.
 
 ## Türkçe Sürüm
 
@@ -171,9 +171,9 @@ The assignment leaves some details open. These are the choices made in this impl
 
 C ile yazılmış, metin tabanlı bir hayatta kalma oyunu. Mars'taki küçük bir araştırma istasyonunda tek başına kalmış bir mühendissin. Tek karakterli komutlarla **sağlık**, **enerji**, **oksijen**, **su**, **yedek parça** ve **modül hasarını** yönet ve kurtarma ekibi gelene kadar **15 gün** hayatta kal.
 
-Bu proje *Algoritma ve Programlama* dersi için geliştirilmiştir. Yalnızca C'nin temel yapılarını kullanır: `switch-case`, `if / else if / else`, `for`, `do-while`, aritmetik ve mantıksal operatörler ve `rand()`.
+Proje yalnızca C'nin temel yapılarını kullanır ve harici kütüphane gerektirmez: `switch-case`, `if / else if / else`, `for`, `do-while`, aritmetik ve mantıksal operatörler ve `rand()`.
 
-> **Not:** Oyun arayüzü, ödevin gereği olarak Türkçedir (terminal uyumu için Türkçe özel karakterler kullanılmamıştır). Komut harfleri Türkçe kısaltmalardır (örn. `K` = *Kolay*).
+> **Not:** Oyun arayüzü Türkçedir (terminal uyumu için Türkçe özel karakterler kullanılmamıştır). Komut harfleri Türkçe kısaltmalardır (örn. `K` = *Kolay*).
 
 ### İçindekiler
 
@@ -285,7 +285,7 @@ Geçersiz bir zorluk girişinde seçim tekrar istenir.
 
 ### Tasarım Kararları
 
-Ödev bazı ayrıntıları açık bırakmaktadır. Bu uygulamada alınan kararlar şunlardır:
+Bazı mekanikler birden fazla şekilde uygulanabilir. Bu uygulamada alınan kararlar şunlardır:
 
 - Tüm sayısal değerler (zorluk tablosu, bulunan miktarlar, onarım miktarları, dinlenme kazanımları, fırtına hasarı) oynanabilir bir denge için seçilmiştir.
 - Kaynak yetersizliği yüzünden iptal edilen komutlar da tur harcar, çünkü yalnızca `D` ve tanımsız komutlar istisnadır. `Q` oyunu bitirir ve tur olarak sayılmaz.
@@ -293,6 +293,4 @@ Geçersiz bir zorluk girişinde seçim tekrar istenir.
 - "15. günü tamamlamak", gün sayacının 15'i geçmesi demektir (45 tur). 16. günün gün başı etkileri uygulanmaz.
 - Bir turun sonunda hem kazanma hem ölüm koşulu oluşursa ölüm önceliklidir.
 - Hava kilidi mührü bir kez sağlandıktan sonra kalıcıdır.
-- `T`, `U` ve `K` komutları enerji harcamaz, çünkü ödev bunlar için bir enerji maliyeti belirtmemektedir.
-
-
+- `T`, `U` ve `K` komutları tasarım gereği enerji harcamaz: tamir yedek parça kullanır, dinlenme enerjiyi geri kazandırır, fırtına ise bir çevre olayıdır.
